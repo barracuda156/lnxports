@@ -38,6 +38,11 @@ homepage            https://www.gnu.org/software/binutils/binutils.html
 master_sites        gnu:binutils
 use_xz              yes
 
+# Source unconditionally includes a header which may not exist.
+# It was added in https://github.com/torvalds/linux/commit/ea3de9ce8aa280c5175c835bd3e94a3a9b814b74
+# https://github.com/RJVB/lnxports/issues/29
+patchfiles-append   patch-fix-riscv.diff
+
 depends_build-append \
                     port:gettext
 # isl is a build dependency, apparently to enable support for GCC's graphite optimisation
