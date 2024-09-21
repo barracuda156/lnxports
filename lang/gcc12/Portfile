@@ -148,6 +148,23 @@ platform darwin {
     configure.args-append  --disable-tls
 }
 
+platform linux {
+    if {${configure.build_arch} eq "riscv64"} {
+        # https://github.com/RJVB/lnxports/issues/24
+        depends_lib-delete \
+                    path:lib/pkgconfig/isl.pc:isl \
+                    port:libiconv
+        # https://github.com/RJVB/lnxports/issues/25
+        configure.args-replace \
+                    --with-isl=${prefix} --without-isl
+        configure.args-delete \
+                    --with-libiconv-prefix=${prefix}
+        # This assumes Pine64, obviously:
+        configure.pre_args-append \
+                    --build=${build_arch}-pine64-${os.platform}
+    }
+}
+
 # Disable ccache
 # configure.ccache    no
 
@@ -397,6 +414,10 @@ if { ${subport} ne ${libcxxname} } {
         }
     }
 
+    # https://github.com/RJVB/lnxports/issues/25
+    if {${build_arch} eq "riscv64"} {
+        default_variants-append +no_sanit
+    }
 }
 
 # https://trac.macports.org/ticket/29067
