@@ -82,7 +82,6 @@ configure.args      --enable-option-checking \
                     --enable-year2038 \
                     --disable-werror \
                     --enable-libssp \
-                    --with-isl=${prefix} \
                     --enable-lto \
                     --enable-compressed-debug-sections=all
 
@@ -99,6 +98,12 @@ configure.args      --enable-option-checking \
     conflicts_build "${name}-dev"
 
 if {${os.platform} eq "linux"} {
+    # Not used on macOS build, but used on Linux one:
+    depends_lib-append \
+                    path:lib/pkgconfig/isl.pc:isl
+    configure.args-append \
+                    --with-isl=${prefix}
+
     configure.args-append \
                     --enable-objc-gc \
                     --enable-host-shared
