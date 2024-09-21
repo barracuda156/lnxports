@@ -102,6 +102,13 @@ if {${os.platform} eq "linux"} {
     configure.args-append \
                     --enable-objc-gc \
                     --enable-host-shared
+
+    if {${configure.build_arch} eq "riscv64"} {
+        # Assume Pine64, no ugly unknown:
+        configure.args-append \
+                    --build=${build_arch}-pine64-linux
+    }
+
     # --enable-shared is no longer available but the `enable_shared` variable still consulted in configure
     configure.env-append \
                     "enable_shared=yes" \
